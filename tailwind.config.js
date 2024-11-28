@@ -5,6 +5,7 @@ export default {
       "./**/*.{html,js}",
       "!./node_modules/**",
     ],
+    darkMode: ['selector', '[data-mode="dark"]'],
     theme: {
         extend: {},
     },
