@@ -1,4 +1,4 @@
-import constants from '../constants.js';
+import { loginRequest, registerRequest, profileRequest, headerKey } from '../constants.js';
 
 export async function login() {
     const loginEmail = document.getElementById('email-login').value;
@@ -26,7 +26,7 @@ export async function login() {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${loginData.data.accessToken}`,
-                'X-Noroff-API-Key': constants.headerKey,
+                'X-Noroff-API-Key': headerKey,
             }
         });
         if (profileInfo.ok) {
@@ -35,10 +35,8 @@ export async function login() {
         } else {
             console.error('Failed to fetch profile info', await profileInfo.text());
         }
-        localStorage.setItem('credits', profileData.data.credits);
 
         window.location.href = '/';
-        console.log(loginData);
     } else {
         console.error('Login failed', await loginResponse.text());
     }
@@ -49,7 +47,7 @@ export async function register() {
     const registerEmail = document.getElementById('email-register').value;
     const registerPass = document.getElementById('password-register').value;
 
-    const registerResponse = await fetch('https://v2.api.noroff.dev/auth/register', {
+    const registerResponse = await fetch(registerRequest, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

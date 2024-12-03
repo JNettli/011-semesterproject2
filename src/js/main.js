@@ -1,7 +1,6 @@
 import { login, register, logout } from './auth/auth.js';
 import { openLoginModal, closeModal, getProfileInfoToModal } from './modal.js';
 
-const darkModeToggle = document.getElementById('dark-mode-toggle');
 const userProfileNav = document.getElementById('user-profile-nav');
 const modalBg = document.getElementById('secret-modal-bg');
 const loginModal = document.getElementById('login-modal');
@@ -70,6 +69,11 @@ userProfileNav.addEventListener('click', function() {
     if (rect.right > viewportWidth) {
         modal.style.left = `${viewportWidth - modalWidth}px`;
     }
+});
+
+document.querySelector('#minimenu-anchor').addEventListener('click', function() {
+    window.location.href = `/profile/?userId=${localStorage.getItem('userName')}`;
+    console.log("clicked!");
 });
 
 // Function to close the profile modal
