@@ -6,10 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="src/css/style.css" rel="stylesheet" />
   <script type="module" src="src/js/main.js"></script>
+  <script type="module" src="src/js/listing/allListing.js"></script>
   <title>Bid Blitz</title>
 </head>
 
-<body>
+<body class="bg-gray-100 dark:bg-neutral-800">
   <nav class="bg-cyan-700 dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
@@ -99,9 +100,10 @@
     </div>
   </div>
 
-  <div class="bg-gray-100 text-black dark:bg-neutral-900 dark:text-white h-screen">
-    hello
-  </div>
+  <main class="text-black dark:text-white mt-4 flex flex-col">
+    <div id="listing-box" class="self-center"></div>
+    <div id="pagination" class="self-center mb-8"></div>
+  </main>
 </body>
 
 </html>

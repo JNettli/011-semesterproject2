@@ -5,8 +5,8 @@ function getUserProfileInfo(param) {
     return urlParams.get(param);
 }
 const userProfileId = getUserProfileInfo('userId');
+document.title = `${userProfileId}'s Bid Blitz Profile`;
 
-// Now GET the info
 
 async function getSingleProfile() {
     const response = await fetch(`${profileRequest}${userProfileId}`, {
@@ -28,20 +28,20 @@ async function getSingleProfile() {
     profileBanner.src = profile.banner.url;
     profileBanner.alt = profile.banner.alt;
     profileImageDiv.appendChild(profileBanner);
-    profileBanner.classList.add('w-1/2', 'h-72', 'object-cover', 'mb-4', 'absolute', 'top-16', 'left-0');
+    profileBanner.classList.add('w-[48rem]', 'h-72', 'object-cover', 'mb-4', 'absolute', 'top-16', 'left-1/2', 'transform', '-translate-x-1/2');
     
     const profileImage = document.createElement('img');
     profileImage.src = profile.avatar.url;
     profileImage.alt = profile.avatar.alt;
     profileImageDiv.appendChild(profileImage);
-    profileImage.classList.add('w-60', 'h-60', 'rounded-full', 'object-cover', 'border-2', 'border-black', 'dark:border-white', 'mt-28', 'relative', 'ml-auto', 'mr-auto');
+    profileImage.classList.add('w-40', 'h-40', 'md:mt-28', 'md:w-60', 'md:h-60', 'rounded-full', 'object-cover', 'border-2', 'border-black', 'dark:border-white', 'mt-50', 'relative', 'ml-auto', 'mr-auto');
 
     const profileInformationBox = document.createElement('div');
     userProfile.appendChild(profileInformationBox);
     profileInformationBox.classList.add('bg-white', 'dark:bg-gray-800', 'p-6', 'rounded', 'flex', 'justify-between', 'mt-[-5rem]');
 
     const profileInfoLeft = document.createElement('div');
-    profileInfoLeft.classList.add('flex', 'flex-col');
+    profileInfoLeft.classList.add('flex', 'flex-col', 'md:w-xl');
     profileInformationBox.appendChild(profileInfoLeft);
 
     const profileName = document.createElement('h2');
@@ -56,7 +56,7 @@ async function getSingleProfile() {
 
     const profileBio = document.createElement('p');
     profileBio.innerText = profile.bio;
-    profileBio.classList.add('text-lg', 'text-black', 'dark:text-white');
+    profileBio.classList.add('text-lg', 'text-black', 'dark:text-white', 'max-w-2xl');
     profileInfoLeft.appendChild(profileBio);
 
     const profileListings = document.createElement('h3');
@@ -96,7 +96,6 @@ async function getSingleProfile() {
     listingBoxHeader.classList.add('mt-4', 'text-lg', 'font-semibold', 'text-black', 'dark:text-white');
     listingBox.appendChild(listingBoxHeader);
 
-    // Loop through listings and display them
     if(listings.length > 0) {
         listings.forEach(listing => {
             const listingDiv = document.createElement('div');
@@ -143,7 +142,6 @@ async function getSingleProfile() {
         listingBox.appendChild(noListings);
     }
 
-    
     if(localStorage.getItem('userName') === userProfileId) {
         const profileWins = document.createElement('h3');
         profileWins.innerText = `Total Wins: ${profile._count.wins}`;
@@ -165,7 +163,5 @@ async function getSingleProfile() {
         newListingButton.classList.remove('hidden');
     }
 }
-
-
 
 getSingleProfile();

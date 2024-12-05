@@ -103,16 +103,25 @@ registerModal.addEventListener('click', function(event) {
     }
 });
 
+
+
 // This is where Dark Mode stuff happens
 
 const darkIcon = document.querySelector('#dark-icon');
 const lightIcon = document.querySelector('#light-icon');
 
-if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    darkIcon.classList.remove('hidden');
-} else {
-    lightIcon.classList.remove('hidden');
+function applyTheme() {
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        darkIcon.classList.remove('hidden');
+        document.documentElement.classList.add('dark');
+    } else {
+        lightIcon.classList.remove('hidden');
+        document.documentElement.classList.remove('dark');
+    }
 }
+
+applyTheme();
+
 var themeToggle = document.getElementById('dark-mode-toggle');
 
 themeToggle.addEventListener('click', function() {

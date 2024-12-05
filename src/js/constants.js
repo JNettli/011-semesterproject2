@@ -8,5 +8,8 @@ export const registerRequest = `${APIbase}auth/register`;
 
 // Profile constants
 export const profileRequest = `${APIbase}auction/profiles/`;
-export const auctionRequest = `${APIbase}auctions`;
 export const bidRequest = `${APIbase}bids`;
+
+// Listing constants
+export const allListings = `${APIbase}auction/listings`;
+export const singleListing = `${APIbase}auction/listings/`;
