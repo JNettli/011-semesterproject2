@@ -6,11 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="../../src/css/style.css" rel="stylesheet" />
   <script type="module" src="../../src/js/main.js"></script>
-  <script type="module" src="../../src/js/profile/edit/edit.js"></script>
+  <script type="module" src="../../src/js/listing/newListing.js"></script>
+  <title>Create New Listing</title>
 </head>
 
-<body class="bg-gray-100 dark:bg-neutral-800">
-  <nav class="bg-cyan-700 dark:bg-gray-800">
+<body>
+  <nav class="bg-cyan-700 dark:bg-gray-800 fixed w-full z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
@@ -34,7 +35,7 @@
               <span id="closeModal" class="relative cursor-pointer float-right">❌</span>
               <div id="profile-modal-content"></div>
               <div class="flex justify-between self-center mt-4">
-                <a id="minimenu-anchor" class="py-2 hover:cursor-pointer hover:text-red-600 hover:drop-shadow-sm">My Profile</a>
+                <a href="#" id="minimenu-anchor" class="py-2 hover:cursor-pointer hover:text-red-600 hover:drop-shadow-sm">My Profile</a>
                 <button id="logout-button" class="bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded">Logout</button>
               </div>
             </div>
@@ -99,18 +100,39 @@
     </div>
   </div>
 
-  <main class="text-black dark:text-white mt-4 flex flex-col bg-white dark:bg-neutral-900 mx-auto rounded-lg max-w-xl p-8">
-    <h1 class="text-3xl text-center">Edit Profile</h1>
-    <form id="edit-profile" class="flex flex-col w-full self-center mt-4">
-        <label for="bio">Your Bio (Max 160 characters)</label>
-        <textarea name="bio" id="bio" class="mb-4 text-black bg-gray-50 p-2 h-24 resize-none border-black border-2 rounded" maxlength="160" placeholder="Enter your bio here..."></textarea>
-        <label for="avatar">Profile Picture</label>
-        <input type="url" name="avatar" id="avatar" class="mb-4 text-black bg-gray-50 p-2 border-black border-2 rounded" placeholder="Enter you avatar image url here...">
-        <label for="banner">Banner Image</label>
-        <input type="url" name="banner" id="banner" class="text-black bg-gray-50 mb-8 p-2 border-black border-2 rounded" placeholder="Enter your banner image url here...">
-        <input type="submit" id="submit-edit" value="Submit" class="p-4 bg-green-700 hover:bg-green-600 hover:cursor-pointer rounded-lg w-1/2 self-center font-bold">
-    </form>
-  </main>
+  
+  <div class="bg-gray-100 text-black dark:bg-neutral-900 dark:text-white -z-50 h-full flex self-center justify-center">
+      <div class="mt-24 mb-16 w-full max-w-2xl bg-white dark:bg-gray-800 p-4 rounded-xl">
+        <button id="back-to-profile" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded md:absolute z-10 md:left-16 md:top-28 ml-1">Back to Profile</button>
+        <form id="new-listing-form" class="flex flex-col">
+            <h1 class="font-semibold text-3xl self-center md:mt-10 md-0">Create New Listing</h1>
+            <label for="title">Listing Title:</label>
+            <input type="text" id="title" class="text-black bg-gray-50 p-2 border-black border-2 rounded" name="title" maxlength="280" placeholder="Enter Listing Title" required>
+            <label for="description" class="mt-4">Description: (Max 280 characters)</label>
+            <textarea id="description" name="description" maxlength="280" class="text-black bg-gray-50 p-2 border-black border-2 rounded resize-none w-full h-48" placeholder="Describe your listing here..." required></textarea>
+            <div class="my-4">
+                <label for="tag1">Furniture</label>
+                <input type="checkbox" id="tag1" name="tags" value="furniture" class="tag-checkbox">
+                <label for="tag2">Vehicle</label>
+                <input type="checkbox" id="tag2" name="tags" value="vehicle" class="tag-checkbox">
+                <label for="tag3">Clothing</label>
+                <input type="checkbox" id="tag3" name="tags" value="clothing" class="tag-checkbox">
+                <label for="tag4">tesT</label>
+                <input type="checkbox" id="tag4" name="tags" value="tesT" class="tag-checkbox">
+                <label for="tag5">Test</label>
+                <input type="checkbox" id="tag5" name="tags" value="Test" class="tag-checkbox">
+            </div>
+            <div id="media-input" class="flex flex-col mb-4">
+                <button id="more-images" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Add Another Image</button>
+                <label for="productImage1">Product Image URL:</label>
+                <input type="url" id="productImage" name="productImage" class="text-black bg-gray-50 p-2 border-black border-2 rounded product-image-input" placeholder="Enter Image URL" required>
+            </div>
+            <label for="endDate">Set End Date:</label>
+            <input type="datetime-local" id="endDate" name="endDate" class="text-black bg-gray-50 p-2 border-black border-2 rounded" required>
+            <button type="submit" form="new-listing-form" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Post your Listing!</button>
+        </form>
+    </div>
+  </div>
 </body>
 
 </html>

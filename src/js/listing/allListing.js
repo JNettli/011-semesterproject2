@@ -2,7 +2,7 @@ import { allListings } from '../constants.js';
 
 // Get all listings and display them
 async function getAllListings() {
-    const response = await fetch(allListings + '?limit=10&_active=true&sort=endsAt&sortOrder=desc&page=1');
+    const response = await fetch(allListings + '?limit=10&_active=true&sort=endsAt&sortOrder=asc&page=1');
     const data = await response.json();
     console.log(data);
     
@@ -10,7 +10,7 @@ async function getAllListings() {
     data.data.forEach(listing => {
         const listingDiv = document.createElement('div');
         listingBox.appendChild(listingDiv);
-        listingDiv.classList.add('bg-white', 'dark:bg-gray-800', 'p-6', 'rounded', 'flex', 'justify-between', 'mb-4', 'max-w-3xl');
+        listingDiv.classList.add('bg-white', 'dark:bg-gray-800', 'p-6', 'rounded', 'flex', 'justify-between', 'mb-4', 'max-w-5xl');
 
         const listingId = listing.id;
         
@@ -25,7 +25,7 @@ async function getAllListings() {
         
         const listingInfo = document.createElement('div');
         listingDiv.appendChild(listingInfo);
-        listingInfo.classList.add('flex', 'flex-col', 'w-2/3');
+        listingInfo.classList.add('flex', 'flex-col', 'max-w-3xl');
         
         const listingTitle = document.createElement('a');
         listingTitle.href = `/listing/?listingId=${listingId}`;
@@ -45,8 +45,9 @@ async function getAllListings() {
         
         const listingEnds = document.createElement('p');
         listingInfo.appendChild(listingEnds);
-        listingEnds.innerText = (Math.floor((Date.parse(data.data[0].endsAt)-Date.now()) / 1000 / 60 / 60 / 24) + " days " + Math.floor((Date.parse(data.data[0].endsAt)-Date.now()) / 1000 / 60 / 60) + " hours " + Math.floor((Date.parse(data.data[0].endsAt)-Date.now()) / 1000 / 60) + " minutes remaining");
+        listingEnds.innerText = (Math.floor((Date.parse(data.data[0].endsAt)-Date.now()) / 1000 / 60 / 60 / 24) + " days " + Math.floor((Date.parse(data.data[0].endsAt)-Date.now()) / 1000 / 60 / 60 % 24) + " hours " + Math.floor((Date.parse(data.data[0].endsAt)-Date.now()) / 1000 / 60 % 60) + " minutes remaining");
         listingEnds.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white');
     });
 }
+
 getAllListings();

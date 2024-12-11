@@ -38,7 +38,7 @@ async function getSingleProfile() {
 
     const profileInformationBox = document.createElement('div');
     userProfile.appendChild(profileInformationBox);
-    profileInformationBox.classList.add('bg-white', 'dark:bg-gray-800', 'p-6', 'rounded', 'flex', 'justify-between', 'mt-[-5rem]');
+    profileInformationBox.classList.add('bg-white', 'dark:bg-gray-800', 'p-6', 'rounded', 'flex', 'justify-between', 'mt-[-1rem]');
 
     const profileInfoLeft = document.createElement('div');
     profileInfoLeft.classList.add('flex', 'flex-col', 'md:w-xl');
@@ -65,6 +65,7 @@ async function getSingleProfile() {
     profileInfoLeft.appendChild(profileListings);
 
     const hiddenProfileInfo = document.createElement('div');
+    hiddenProfileInfo.classList.add('w-40');
     profileInformationBox.appendChild(hiddenProfileInfo);
 
     const listingsOfProfile = await fetch(`${profileRequest}${userProfileId}/listings`, {
@@ -87,7 +88,7 @@ async function getSingleProfile() {
     newListingButton.innerText = 'Create New Listing';
     newListingButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'mt-4', 'hidden');
     newListingButton.addEventListener('click', function() {
-        window.location.href = '/create-listing';
+        window.location.href = '/listing/create/';
     });
     listingBox.appendChild(newListingButton);
 
@@ -110,11 +111,12 @@ async function getSingleProfile() {
 
     
             const listingInfo = document.createElement('div');
+            listingInfo.classList.add('flex', 'flex-col', 'w-full', 'overflow-hidden');
             listingDiv.appendChild(listingInfo);
     
             const listingTitle = document.createElement('h4');
             listingTitle.innerText = listing.title;
-            listingTitle.classList.add('text-2xl', 'font-bold', 'text-black', 'dark:text-white');
+            listingTitle.classList.add('text-2xl', 'font-bold', 'text-black', 'dark:text-white', 'text-clip');
             listingInfo.appendChild(listingTitle);
     
             const listingDescription = document.createElement('p');

@@ -7,6 +7,8 @@ const loginModal = document.getElementById('login-modal');
 const registerModal = document.getElementById('register-modal');
 const loginButton = document.getElementById('login-button');
 
+modalBg.classList.add('z-50');
+
 // Logout
 document.getElementById('logout-button').addEventListener('click', () => {
     logout();

@@ -14,7 +14,7 @@ async function getSingleListing() {
 
     const listingDiv = document.createElement('div');
     listingBox.appendChild(listingDiv);
-    listingDiv.classList.add('bg-white', 'dark:bg-gray-800', 'p-4', 'rounded', 'mb-4', 'max-w-3xl');
+    listingDiv.classList.add('bg-white', 'dark:bg-gray-800', 'p-4', 'rounded', 'mb-4', 'max-w-4xl');
 
     const listingImage = document.createElement('img');
     listingDiv.appendChild(listingImage);
@@ -24,9 +24,9 @@ async function getSingleListing() {
 
     const listingInfo = document.createElement('div');
     listingDiv.appendChild(listingInfo);
-    listingInfo.classList.add('flex', 'flex-col', 'w-2/3', 'mx-auto');
+    listingInfo.classList.add('flex', 'flex-col', 'mx-auto', 'truncate');
 
-    const listingTitle = document.createElement('div');
+    const listingTitle = document.createElement('h1');
     listingInfo.appendChild(listingTitle);
     listingTitle.innerText = listing.title;
     listingTitle.classList.add('text-2xl', 'font-bold', 'text-black', 'dark:text-white');
@@ -43,7 +43,7 @@ async function getSingleListing() {
 
     const listingEnds = document.createElement('p');
     listingInfo.appendChild(listingEnds);
-    listingEnds.innerText = (Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 / 60 / 24) + " days " + Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 / 60) + " hours " + Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60) + " minutes remaining");
+    listingEnds.innerText = (Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 / 60 / 24) + " days " + Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 / 60 % 60) + " hours " + Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 % 60) + " minutes remaining");
     listingEnds.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white');
 
     const bidButton = document.createElement('button');
