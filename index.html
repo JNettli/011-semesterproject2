@@ -7,11 +7,12 @@
   <link href="src/css/style.css" rel="stylesheet" />
   <script type="module" src="src/js/main.js"></script>
   <script type="module" src="src/js/listing/allListing.js"></script>
+  <link rel="icon" type="image/png" sizes="32x32" href="/src/styles/favicon/bidblitz.png">
   <title>Bid Blitz</title>
 </head>
 
 <body class="bg-gray-200 dark:bg-neutral-900">
-  <nav class="bg-cyan-700 dark:bg-gray-800">
+  <nav class="bg-cyan-700 dark:bg-gray-800 fixed w-full z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
@@ -100,8 +101,8 @@
     </div>
   </div>
 
-  <main class="text-black dark:text-white mt-4 flex flex-col">
-    <div id="listing-box" class="self-center"></div>
+  <main class="text-black dark:text-white flex flex-col">
+    <div id="listing-box" class="self-center mt-20"></div>
     <div id="pagination" class="self-center mb-8"></div>
   </main>
 </body>
