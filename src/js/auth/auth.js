@@ -60,8 +60,6 @@ export async function register() {
     });
 
     if (registerResponse.ok) {
-        const registerData = await registerResponse.json();
-        console.log(registerData);
         alert('Registration successful! Please login to continue.');
         window.location.href = '/';
     } else {
@@ -73,4 +71,20 @@ export async function register() {
 export function logout() {
     localStorage.clear();
     window.location.href = '/';
+}
+
+// Get user profile info
+export async function updateProfileInfo() {
+    const userProfileId = localStorage.getItem('userName');
+    const response = await fetch(`${profileRequest}${userProfileId}`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'X-Noroff-API-Key': '78ddf18d-7d41-498d-939d-195c2b76f939',
+        },
+    });
+
+    const json = await response.json();
+    const profile = json.data;
+    localStorage.setItem('userImage', profile.avatar.url);
+    localStorage.setItem('credits', profile.credits);
 }

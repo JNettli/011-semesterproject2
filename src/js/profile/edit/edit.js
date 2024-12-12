@@ -1,4 +1,4 @@
-import { profileRequest } from '../../constants.js';
+import { profileRequest, headerKey } from '../../constants.js';
 
 
 function getUserProfileInfo(param) {
@@ -9,18 +9,16 @@ function getUserProfileInfo(param) {
 const userProfileId = getUserProfileInfo('userId');
 document.title = `Edit ${userProfileId}'s Profile`;
 
-// Check if current user is the same as the user being viewed
-/*
 if (localStorage.getItem('userName') !== userProfileId) {
     alert('You are not authorized to view this page!');
     window.location.href = '/';
 };
-*/
+
 async function getSingleProfile() {
     const response = await fetch(`${profileRequest}${userProfileId}`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'X-Noroff-API-Key': '78ddf18d-7d41-498d-939d-195c2b76f939',
+            'X-Noroff-API-Key': headerKey,
         },
     });
 

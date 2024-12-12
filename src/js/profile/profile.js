@@ -68,7 +68,7 @@ async function getSingleProfile() {
     hiddenProfileInfo.classList.add('w-40');
     profileInformationBox.appendChild(hiddenProfileInfo);
 
-    const listingsOfProfile = await fetch(`${profileRequest}${userProfileId}/listings`, {
+    const listingsOfProfile = await fetch(`${profileRequest}${userProfileId}/listings?limit=10`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'X-Noroff-API-Key': '78ddf18d-7d41-498d-939d-195c2b76f939',
@@ -79,6 +79,7 @@ async function getSingleProfile() {
 
     const listings = listingsJson.data;
     console.log(listings);
+    console.log(listings.media)
 
     const listingBox = document.createElement('div');
     listingBox.classList.add('grid', 'grid-cols-1', 'gap-4');
@@ -104,8 +105,9 @@ async function getSingleProfile() {
             listingBox.appendChild(listingDiv);
             
             const listingImage = document.createElement('img');
-            listingImage.src = listing.media[0].url;
-            listingImage.alt = listing.media[0].alt;
+            listing.media.push({url: 'https://via.placeholder.com/150', alt: 'Nice image'});
+            listingImage.src = listing.media[0]?.url || 'https://via.placeholder.com/150';
+            listingImage.alt = listing.media[0]?.alt || 'Nice image';
             listingImage.classList.add('w-48', 'h-48', 'object-cover', 'rounded', 'mr-4');
             listingDiv.appendChild(listingImage);
 

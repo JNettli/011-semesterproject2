@@ -13,3 +13,10 @@ export const bidRequest = `${APIbase}bids`;
 // Listing constants
 export const allListings = `${APIbase}auction/listings`;
 export const singleListing = `${APIbase}auction/listings/`;
+
+export function checkLogin() {
+    if (!localStorage.getItem('token')) {
+        alert('You need to be logged in to access this page.');
+        window.location.href = '/login';
+    }
+}

@@ -1,4 +1,4 @@
-import { login, register, logout } from './auth/auth.js';
+import { login, register, logout, updateProfileInfo } from './auth/auth.js';
 import { openLoginModal, closeModal, getProfileInfoToModal } from './modal.js';
 
 const userProfileNav = document.getElementById('user-profile-nav');
@@ -151,3 +151,5 @@ themeToggle.addEventListener('click', function() {
         }
     }
 });
+
+updateProfileInfo();

@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="src/css/style.css" rel="stylesheet" />
-  <script type="module" src="src/js/main.js"></script>
-  <script type="module" src="src/js/listing/allListing.js"></script>
-  <title>Bid Blitz</title>
+  <link href="../../src/css/style.css" rel="stylesheet" />
+  <script type="module" src="../../src/js/main.js"></script>
+  <script type="module" src="../../src/js/listing/edit.js"></script>
+  <title>Edit Listing</title>
 </head>
 
 <body class="bg-gray-200 dark:bg-neutral-900">
@@ -100,10 +100,23 @@
     </div>
   </div>
 
-  <main class="text-black dark:text-white mt-4 flex flex-col">
-    <div id="listing-box" class="self-center"></div>
-    <div id="pagination" class="self-center mb-8"></div>
-  </main>
+  <main class="text-black dark:text-white mt-4 flex justify-center">
+      <div class="mb-16 w-full max-w-2xl bg-white dark:bg-gray-800 p-4 rounded-xl">  
+        <form id="edit-listing" class="flex flex-col">
+            <label for="title">Edit Title:</label>
+            <input type="text" id="title" name="title" class="text-black bg-gray-50 p-2 border-black border-2 rounded" placeholder="Enter Title" maxlength="280" required>
+            <label for="description" class="mt-2">Edit Description: (Max 280 characters)</label>
+            <textarea id="description" name="description" class="text-black bg-gray-50 p-2 border-black border-2 rounded resize-none h-28" placeholder="Enter Description" maxlength="280" required></textarea>
+            <label for="tags" class="mt-2">Edit Tags:</label>
+            <input type="text" id="tags" name="tags" class="text-black bg-gray-50 p-2 border-black border-2 rounded" placeholder="Enter Tags" required>
+            <div id="media-input" class="flex flex-col mb-4">
+                <button id="more-images" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-2">Add Another Image</button>
+                <label for="productImage1">Product Image URL:</label>
+            </div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Save Edit</button>
+            </form>
+        </div>
+    </main>
 </body>
 
 </html>
