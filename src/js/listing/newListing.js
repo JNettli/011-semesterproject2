@@ -72,7 +72,6 @@ newListingForm.addEventListener('submit', async (e) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             alert('Listing created!');
             window.location.href = `/listing/?listingId=${data.data.id}`;
         } else {
