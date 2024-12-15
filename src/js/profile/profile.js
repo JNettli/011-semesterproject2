@@ -1,4 +1,6 @@
-import { profileRequest } from '../constants.js';
+import { profileRequest, headerKey, checkLogin } from '../constants.js';
+
+checkLogin();
 
 function getUserProfileInfo(param) {
     const urlParams = new URLSearchParams(window.location.search);
@@ -7,20 +9,21 @@ function getUserProfileInfo(param) {
 const userProfileId = getUserProfileInfo('userId');
 document.title = `${userProfileId}'s Bid Blitz Profile`;
 
+const itemsPerPage = 10;
+let currentPage = 1;
 
 async function getSingleProfile() {
     const response = await fetch(`${profileRequest}${userProfileId}`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'X-Noroff-API-Key': '78ddf18d-7d41-498d-939d-195c2b76f939',
+            'X-Noroff-API-Key': headerKey,
         },
     });
-
-    const json = await response.json();
-
-    console.log(json.data);
-    const profile = json.data;
     const userProfile = document.querySelector('#user-profile');
+    userProfile.innerHTML = '';
+    
+    const json = await response.json();
+    const profile = json.data;
 
     const profileImageDiv = document.createElement('div');
     userProfile.appendChild(profileImageDiv);
@@ -28,13 +31,13 @@ async function getSingleProfile() {
     profileBanner.src = profile.banner.url;
     profileBanner.alt = profile.banner.alt;
     profileImageDiv.appendChild(profileBanner);
-    profileBanner.classList.add('w-[48rem]', 'h-72', 'object-cover', 'mb-4', 'absolute', 'top-16', 'left-1/2', 'transform', '-translate-x-1/2');
+    profileBanner.classList.add('w-[48rem]', 'h-72', 'object-cover', 'mb-4', 'absolute', 'top-16', 'left-1/2', 'transform', '-translate-x-1/2', 'border-x-8', 'border-gray-100', 'dark:border-neutral-900');
     
     const profileImage = document.createElement('img');
     profileImage.src = profile.avatar.url;
     profileImage.alt = profile.avatar.alt;
     profileImageDiv.appendChild(profileImage);
-    profileImage.classList.add('w-40', 'h-40', 'md:mt-28', 'md:w-60', 'md:h-60', 'rounded-full', 'object-cover', 'border-2', 'border-black', 'dark:border-white', 'mt-50', 'relative', 'ml-auto', 'mr-auto');
+    profileImage.classList.add('w-40', 'h-40', 'md:mt-12', 'md:w-60', 'md:h-60', 'rounded-full', 'object-cover', 'border-2', 'border-black', 'dark:border-white', 'mt-32', 'relative', 'ml-auto', 'mr-auto', 'md:top-10');
 
     const profileInformationBox = document.createElement('div');
     userProfile.appendChild(profileInformationBox);
@@ -68,18 +71,16 @@ async function getSingleProfile() {
     hiddenProfileInfo.classList.add('w-40');
     profileInformationBox.appendChild(hiddenProfileInfo);
 
-    const listingsOfProfile = await fetch(`${profileRequest}${userProfileId}/listings?limit=10`, {
+    const listingsOfProfile = await fetch(`${profileRequest}${userProfileId}/listings?limit=${itemsPerPage}&_bids=true&page=${currentPage}`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'X-Noroff-API-Key': '78ddf18d-7d41-498d-939d-195c2b76f939',
+            'X-Noroff-API-Key': headerKey,
         },
     });
 
     const listingsJson = await listingsOfProfile.json();
 
     const listings = listingsJson.data;
-    console.log(listings);
-    console.log(listings.media)
 
     const listingBox = document.createElement('div');
     listingBox.classList.add('grid', 'grid-cols-1', 'gap-4');
@@ -127,18 +128,68 @@ async function getSingleProfile() {
             listingInfo.appendChild(listingDescription);
     
             const listingPrice = document.createElement('p');
-            listingPrice.innerText = `Current Bid: ${listing._count.bids} 🪙`;
-            listingPrice.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white');
+            if(listing.bids.length > 0) {
+                const lastBid = listing.bids.splice(-1)[0].amount
+                listingPrice.innerText = `Current Bid: ${lastBid} 🪙`;
+                listingPrice.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white', 'mt-auto');
+            } else {
+                listingPrice.innerText = `There are currently no bids on this listing!`;
+                listingPrice.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white', 'mt-auto');
+            }
             listingInfo.appendChild(listingPrice);
     
             const listingButton = document.createElement('button');
             listingButton.innerText = 'View Listing';
             listingButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'mt-4');
-            listingButton.addEventListener('click', function() {
+            listingButton.addEventListener('click', () => {
                 window.location.href = `/listing/?listingId=${listing.id}`;
             });
             listingInfo.appendChild(listingButton);
+            if(Math.floor(Date.parse(listing.endsAt))-Date.now() < 0) {
+                listingDiv.classList.add('border-4', 'border-red-500', 'dark:border-red-400');
+                listingPrice.innerText = `This listing has ended!`;
+                listingPrice.classList.add('text-red-500', 'dark:text-red-400')
+            }
         });
+        const paginationBox = document.querySelector('#pagination');
+        paginationBox.classList.add('flex', 'gap-2')
+        paginationBox.innerHTML = '';
+        
+        const totalPages = listingsJson.meta.pageCount;
+        console.log(listingsJson.meta);
+        
+        if(currentPage > 1) {
+            const prevButtonBox = document.createElement('div');
+            const prevButton = document.createElement('button');
+            prevButton.innerText = "<-";
+            prevButton.addEventListener('click', () => {
+                currentPage--;
+                updateURL();
+                getSingleProfile();
+            });
+            prevButton.classList.add('text-black', 'dark:text-white', 'text-xl', 'font-black');
+            paginationBox.appendChild(prevButtonBox);
+            prevButtonBox.appendChild(prevButton);
+        }
+        const currentPageDisplay = document.createElement('div');
+        currentPageDisplay.innerText = `Current Page: ${currentPage}`;
+        currentPageDisplay.classList.add('text-black', 'dark:text-white', 'mt-1');
+        paginationBox.appendChild(currentPageDisplay);
+        
+        if(currentPage < totalPages) {
+            const nextButtonBox = document.createElement('div');
+            const nextButton = document.createElement('button');
+            nextButton.innerText = "->";
+            nextButton.addEventListener('click', () => {
+                currentPage++;
+                updateURL();
+                getSingleProfile();
+            });
+            nextButton.classList.add('text-black', 'dark:text-white', 'text-xl', 'font-black');
+            paginationBox.appendChild(nextButtonBox);
+            nextButtonBox.appendChild(nextButton);
+            getCurrentPageFromURL();
+        }
     } else {
         const noListings = document.createElement('p');
         noListings.innerText = 'No listings found.';
@@ -165,6 +216,21 @@ async function getSingleProfile() {
         });
         hiddenProfileInfo.appendChild(editProfileButton);
         newListingButton.classList.remove('hidden');
+    }
+}
+// Function to update the URL with the current page
+function updateURL() {
+    const url = new URL(window.location);
+    url.searchParams.set('page', currentPage);
+    window.history.pushState({}, '', url); // Update the URL without reloading the page
+}
+
+// Function to get the current page from the URL
+function getCurrentPageFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+    if (page) {
+        currentPage = parseInt(page, 10);
     }
 }
 

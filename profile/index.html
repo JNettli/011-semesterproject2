@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <nav class="bg-cyan-700 dark:bg-gray-800 fixed w-full z-40">
+  <nav class="bg-cyan-700 dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
@@ -55,13 +55,13 @@
         <div class="mb-4">
           <label for="email-login" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
           <input type="email" id="email-login" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
             placeholder="youremail@stud.noroff.no">
         </div>
         <div class="mb-4">
           <label for="password-login" class="block text-sm font-medium text-gray-700 dark:text-white">Password</label>
           <input type="password" id="password-login" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
             placeholder="********">
         </div>
         <button type="submit" class="bg-cyan-700 text-white px-4 py-2 rounded">Login</button>
@@ -80,17 +80,17 @@
         <div class="mb-4">
           <label for="username" class="block text-sm font-medium text-gray-700 dark:text-white">Username</label>
           <input type="text" id="username" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 mb-4"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 mb-4 text-black"
             placeholder="Username">
           <label for="email-register" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
           <input type="email" id="email-register" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
             placeholder="youremail@stud.noroff.no">
         </div>
         <div class="mb-4">
           <label for="password-register" class="block text-sm font-medium text-gray-700 dark:text-white">Password</label>
           <input type="password" id="password-register" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
             placeholder="********">
         </div>
         <button type="submit" class="bg-cyan-700 text-white px-4 py-2 rounded">Register</button>
@@ -100,9 +100,10 @@
     </div>
   </div>
 
-  <div class="bg-gray-100 text-black dark:bg-neutral-900 dark:text-white -z-50 min-h-screen">
-    <div id="user-profile" class="flex flex-col max-w-3xl mx-auto"></div>
-  </div>
+  <main class="bg-gray-100 text-black dark:bg-neutral-900 dark:text-white -z-50 min-h-screen">
+    <div id="user-profile" class="flex flex-col max-w-3xl mx-auto border-8 border-gray-100 dark:border-neutral-900"></div>
+    <div id="pagination" class="justify-center pb-8"></div>
+  </main>
 </body>
 
 </html>

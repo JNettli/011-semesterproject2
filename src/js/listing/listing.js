@@ -105,10 +105,11 @@ async function getSingleListing() {
     listingDescription.classList.add('text-lg', 'text-black', 'dark:text-white');
 
     const listingBidPrice = document.createElement('p');
+    listingBidPrice.classList.add('text-lg', 'font-bold', 'text-black', 'dark:text-white', 'mt-8');
     if(listing.bids.length > 0) {
-        const lastBid = listing.bids.slice(-1)[0].amount;
+        const allBidsSorted = listing.bids.sort((a, b) => b.amount - a.amount);
+        const lastBid = allBidsSorted.slice()[0].amount;
         listingBidPrice.innerText = `Current Bid: ${lastBid} 🪙`;
-        listingBidPrice.classList.add('text-lg', 'font-bold', 'text-black', 'dark:text-white');
         const listingTotalBidders = document.createElement('p');
         listingInfo.appendChild(listingTotalBidders);
         listingTotalBidders.innerText = `Total Bidders: ${listing._count.bids}`;
@@ -120,23 +121,21 @@ async function getSingleListing() {
 
     const listingEnds = document.createElement('p');
     listingInfo.appendChild(listingEnds);
+
     const listingTimeToEnd = document.createElement('p');
     listingInfo.appendChild(listingTimeToEnd);
-    listingEnds.innerText = 'Listing will end in: '
-    listingTimeToEnd.innerText = (Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 / 60 / 24) + " days " + Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 / 60 % 60) + " hours " + Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 % 60) + " minutes remaining");
-    listingEnds.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white');
     listingTimeToEnd.classList.add('text-lg', 'font-bold', 'text-red-500', 'dark:text-red-400');
-
+    
     const listingSellerCreatedBy = document.createElement('p');
     listingSellerInfoBox.appendChild(listingSellerCreatedBy);
     listingSellerCreatedBy.innerText = 'Created by: ';
-
+    
     const listingSellerInfo = document.createElement('a');
     listingSellerInfoBox.appendChild(listingSellerInfo);
     listingSellerInfo.innerText = `${listing.seller.name}`;
     listingSellerInfo.href = `/profile/?userId=${listing.seller.name}`;
     listingSellerInfo.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white');
-
+    
     if(listing.seller.name === localStorage.getItem('userName')) {
         const deleteButton = document.createElement('button');
         const editButton = document.createElement('button');
@@ -146,13 +145,14 @@ async function getSingleListing() {
         bidArea.appendChild(editButton);
         editButton.innerText = 'Edit';
         editButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'my-4', 'w-32');
-        editButton.addEventListener('click', function() {
+        editButton.addEventListener('click', (e) => {
+            e.preventDefault();
             window.location.href = `/listing/edit/?listingId=${listingId}`;
         });
         bidArea.appendChild(deleteButton);
         deleteButton.innerText = 'Delete';
         deleteButton.classList.add('bg-red-500', 'hover:bg-red-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'my-4', 'ml-8', 'w-32');
-        deleteButton.addEventListener('click', async function() {
+        deleteButton.addEventListener('click', async () => {
             if(confirm('Are you sure you want to delete this listing?') == true) {
                 const response = await fetch(singleListing + listingId, {
                     method: 'DELETE',
@@ -173,29 +173,42 @@ async function getSingleListing() {
     
     const lastSellersBox = document.createElement('div');
     listingDiv.appendChild(lastSellersBox);
-    lastSellersBox.classList.add('flex', 'flex-col', 'mx-24')
+    lastSellersBox.classList.add('flex', 'flex-col');
     const lastSellerParagraph = document.createElement('p');
     lastSellersBox.appendChild(lastSellerParagraph);
-    lastSellerParagraph.classList.add('mt-8', 'font-bold', 'text-lg')
-    lastSellerParagraph.innerText = "All bidders:"
-
-    listing.bids.reverse().forEach(bidder => {
-        console.log(bidder);
-
+    lastSellerParagraph.classList.add('mt-8', 'font-bold', 'text-lg', 'self-center');
+    lastSellerParagraph.innerText = "All bidders:";
+    
+    if(Math.floor(Date.parse(listing.endsAt))-Date.now() < 0) {
+        listingDiv.classList.add('border-4', 'border-red-500');
+        listingBidPrice.classList.add('hidden');
+        listingTimeToEnd.innerText = `This listing has ended!`;
+        listingTimeToEnd.classList.add('mt-8', 'text-xl', 'text-red-500', 'dark:text-red-400');
+        bidArea.classList.add('hidden');
+        lastSellersBox.classList.add('hidden');
+    } else {
+        listingEnds.innerText = 'Listing will end in: ';
+        listingTimeToEnd.innerText = (Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 / 60 / 24) + " days " + Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 / 60 % 60) + " hours " + Math.floor((Date.parse(data.data.endsAt)-Date.now()) / 1000 / 60 % 60) + " minutes remaining");
+        listingEnds.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white');
+    }
+    
+    listing.bids.sort((a, b) => b.amount - a.amount);
+    
+    listing.bids.forEach(bidder => {
         const bidderName = bidder.bidder.name;
         const bidderAvatar = bidder.bidder.avatar.url;
         const bidAmount = bidder.amount;
         
         const bidderBox = document.createElement('div');
         lastSellersBox.appendChild(bidderBox);
-        bidderBox.classList.add('flex', 'my-2', 'border-2', 'border-gray-400' , 'dark:border-neutral-500', 'rounded-lg', 'p-2', 'max-w-sm')
+        bidderBox.classList.add('flex', 'my-2', 'border-2', 'border-gray-400' , 'dark:border-neutral-500', 'rounded-lg', 'p-2', 'w-64', 'self-center')
 
         const avatarAnchorBox = document.createElement('a');
         bidderBox.appendChild(avatarAnchorBox);
         const avatarBox = document.createElement('img');
         avatarAnchorBox.appendChild(avatarBox);
         avatarBox.src = bidderAvatar;
-        avatarBox.classList.add('h-24', 'w-24', 'rounded-full', 'mr-20', 'border-2', 'border-gray-400' , 'dark:border-neutral-500');
+        avatarBox.classList.add('h-16', 'w-16', 'rounded-full', 'mr-2', 'border-2', 'border-gray-400' , 'dark:border-neutral-500');
         avatarAnchorBox.href = `/profile/?userId=${bidder.bidder.name}`;
 
         const leftSideBidBox = document.createElement('div');
@@ -206,13 +219,11 @@ async function getSingleListing() {
         leftSideBidBox.appendChild(bidAmountBox);
         bidAmountBox.innerText = `Bid: ${bidAmount} 🪙`;
 
-
         const nameOfBidder = document.createElement('a');
         nameOfBidder.innerText = bidderName;
         nameOfBidder.href = `/profile/?userId=${bidder.bidder.name}`;
         leftSideBidBox.appendChild(nameOfBidder);
         nameOfBidder.classList.add('font-semibold');
-
     });
 }
 

@@ -7,12 +7,13 @@
   <link href="src/css/style.css" rel="stylesheet" />
   <script type="module" src="src/js/main.js"></script>
   <script type="module" src="src/js/listing/allListing.js"></script>
+  <script type="module" src="src/js/listing/search.js"></script>
   <link rel="icon" type="image/png" sizes="32x32" href="/src/styles/favicon/bidblitz.png">
   <title>Bid Blitz</title>
 </head>
 
 <body class="bg-gray-200 dark:bg-neutral-900">
-  <nav class="bg-cyan-700 dark:bg-gray-800 fixed w-full z-40">
+  <nav class="bg-cyan-700 dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
@@ -22,8 +23,16 @@
           <button id="dark-mode-toggle" class="ml-5">
             <span id="dark-icon" class="hidden">☀️</span>
             <span id="light-icon" class="hidden">🌙</span>
-            
           </button>
+        </div>
+        <div class="flex px-4 rounded-md border-2 border-blue-500 overflow-hidden m-auto bg-white h-10">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px"
+            class="fill-gray-600 mr-3 rotate-90">
+            <path
+              d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z">
+            </path>
+          </svg>
+          <input type="text" id="search-bar" placeholder="Search Listings..." maxlength="280" class="w-full outline-none text-black text-sm" />
         </div>
         <div class="relative self-center flex md:ml-10">
           <button class="text-white hover:text-red-600" id="login-button">Login</button>
@@ -46,7 +55,7 @@
     </div>
   </nav>
 
-  <div id="login-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+  <div id="login-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10 hidden">
     <div class="bg-white dark:bg-neutral-800 dark:text-white rounded-lg shadow-lg p-6 w-96">
       <div class="flex justify-between mb-4">
         <h2 class="text-lg font-bold">Login</h2>
@@ -56,13 +65,13 @@
         <div class="mb-4">
           <label for="email-login" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
           <input type="email" id="email-login" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
             placeholder="youremail@stud.noroff.no">
         </div>
         <div class="mb-4">
           <label for="password-login" class="block text-sm font-medium text-gray-700 dark:text-white">Password</label>
           <input type="password" id="password-login" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
             placeholder="********">
         </div>
         <button type="submit" class="bg-cyan-700 text-white px-4 py-2 rounded">Login</button>
@@ -71,7 +80,7 @@
           class="dark:text-white underline hover:text-red-600">Click here</button> to register a profile!</p>
     </div>
   </div>
-  <div id="register-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+  <div id="register-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10 hidden">
     <div class="bg-white dark:bg-neutral-800 dark:text-white rounded-lg shadow-lg p-6 w-96">
       <div class="flex justify-between mb-4">
         <h2 class="text-lg font-bold">Register a new account</h2>
@@ -81,17 +90,17 @@
         <div class="mb-4">
           <label for="username" class="block text-sm font-medium text-gray-700 dark:text-white">Username</label>
           <input type="text" id="username" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 mb-4"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 mb-4 text-black"
             placeholder="Username">
           <label for="email-register" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
           <input type="email" id="email-register" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
             placeholder="youremail@stud.noroff.no">
         </div>
         <div class="mb-4">
           <label for="password-register" class="block text-sm font-medium text-gray-700 dark:text-white">Password</label>
           <input type="password" id="password-register" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700"
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
             placeholder="********">
         </div>
         <button type="submit" class="bg-cyan-700 text-white px-4 py-2 rounded">Register</button>
@@ -102,7 +111,7 @@
   </div>
 
   <main class="text-black dark:text-white flex flex-col">
-    <div id="listing-box" class="self-center mt-20"></div>
+    <div id="listing-box" class="self-center mt-4 w-full max-w-5xl"></div>
     <div id="pagination" class="self-center mb-8"></div>
   </main>
 </body>

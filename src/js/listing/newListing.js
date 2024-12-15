@@ -1,4 +1,4 @@
-import { allListings, checkLogin } from '../constants.js';
+import { allListings, checkLogin, headerKey } from '../constants.js';
 
 checkLogin();
 
@@ -35,7 +35,6 @@ newListingForm.addEventListener('submit', async (e) => {
     const description = document.querySelector('#description').value;
     const endDate = document.querySelector('#endDate').value;
     const media = [];
-    const tags = [];
     
     document.querySelectorAll('.product-image-input').forEach(input => {
         if(input.value !== '') {
@@ -43,16 +42,6 @@ newListingForm.addEventListener('submit', async (e) => {
             media.push({url:input.value, alt:input.id})
         }
     });
-    
-    const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
-    
-    checkBoxes.forEach(checkbox => {
-        if(checkbox.checked) {
-            tags.push(
-                checkbox.value
-            );
-        }
-    })
 
     async function createPost() {
         const response = await fetch(allListings, {
@@ -60,12 +49,11 @@ newListingForm.addEventListener('submit', async (e) => {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'X-Noroff-API-Key': '78ddf18d-7d41-498d-939d-195c2b76f939',
+                'X-Noroff-API-Key': headerKey,
             },
             body: JSON.stringify({
                 title: title,
                 description: description,
-                tags: tags,
                 media: media,
                 endsAt: endDate,
             }),

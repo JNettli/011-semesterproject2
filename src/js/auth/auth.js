@@ -1,4 +1,4 @@
-import { loginRequest, registerRequest, profileRequest, headerKey } from '../constants.js';
+import { loginRequest, registerRequest, profileRequest, headerKey, checkLogin } from '../constants.js';
 
 export async function login() {
     const loginEmail = document.getElementById('email-login').value;
@@ -38,7 +38,16 @@ export async function login() {
 
         window.location.href = '/';
     } else {
-        console.error('Login failed', await loginResponse.text());
+        const err = await loginResponse.json();
+        console.log(err.errors[0].message);
+        const errorMessage = document.createElement('p');
+        const loginForm = document.querySelector('#login-form');
+        errorMessage.classList.add('text-red-500', 'dark:text-red-400');
+        errorMessage.innerText = `${err.errors[0].message}`;
+        loginForm.appendChild(errorMessage);
+        setTimeout(() => {
+            errorMessage.innerText = "";
+        }, 6000);
     }
 }
 
@@ -63,7 +72,16 @@ export async function register() {
         alert('Registration successful! Please login to continue.');
         window.location.href = '/';
     } else {
-        console.error('Registration failed', await registerResponse.text());
+        const err = await loginResponse.json();
+        console.log(err.errors[0].message);
+        const errorMessage = document.createElement('p');
+        const registerForm = document.querySelector('#register-form');
+        errorMessage.classList.add('text-red-500', 'dark:text-red-400');
+        errorMessage.innerText = `${err.errors[0].message}`;
+        registerForm.appendChild(errorMessage);
+        setTimeout(() => {
+            errorMessage.innerText = "";
+        }, 6000);
     }
 }
 
@@ -74,17 +92,21 @@ export function logout() {
 }
 
 // Get user profile info
-export async function updateProfileInfo() {
-    const userProfileId = localStorage.getItem('userName');
-    const response = await fetch(`${profileRequest}${userProfileId}`, {
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'X-Noroff-API-Key': '78ddf18d-7d41-498d-939d-195c2b76f939',
-        },
-    });
 
-    const json = await response.json();
-    const profile = json.data;
-    localStorage.setItem('userImage', profile.avatar.url);
-    localStorage.setItem('credits', profile.credits);
+
+export async function updateProfileInfo() {
+    if (localStorage.getItem('userId') !== null) {
+        const userProfileId = localStorage.getItem('userName');
+        const response = await fetch(`${profileRequest}${userProfileId}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'X-Noroff-API-Key': headerKey,
+            },
+        });
+        
+        const json = await response.json();
+        const profile = json.data;
+        localStorage.setItem('userImage', profile.avatar.url);
+        localStorage.setItem('credits', profile.credits);
+    }
 }
