@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -111,6 +111,19 @@
   </div>
 
   <main class="text-black dark:text-white flex flex-col">
+    <div id="filter" class="self-center mt-4 w-full max-w-3xl">
+      <label for="sortBy">Sort By:</label>
+      <select name="sortBy" id="sortBy" class="text-black w-48">
+        <option value="op1">Ends First</option>
+        <option value="op2">Option 2</option>
+        <option value="op3">Option 3</option>
+      </select>
+      <label for="sortByAscDesc">Sort By Asc/Desc:</label>
+      <select name="sortByAscDesc" id="sortByAscDesc" class="text-black w-48">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </div>
     <div id="listing-box" class="self-center mt-4 w-full max-w-5xl"></div>
     <div id="pagination" class="self-center mb-8"></div>
   </main>
