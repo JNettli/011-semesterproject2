@@ -8,9 +8,11 @@ const searchQuery = params.get('q');
 const itemsPerPage = 10;
 let currentPage = 1;
 
+document.querySelector()
+
 if(searchQuery != null) {
     async function getSearchedListings() {
-        const response = await fetch(allListings + "/search?q=" + searchQuery + `&limit=${itemsPerPage}&_bids=true&_seller=true&_active=true&sortOrder=asc&page=${currentPage}`);
+        const response = await fetch(allListings + "/search?q=" + searchQuery + `&limit=${itemsPerPage}&_bids=true&_seller=true&_active=true&sortOrder=${ascDesc}&page=${currentPage}`);
         const data = await response.json();
 
         const listingBox = document.getElementById('listing-box');
