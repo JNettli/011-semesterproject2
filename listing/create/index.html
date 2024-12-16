@@ -1,127 +1,215 @@
 <!doctype html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link href="../../src/css/style.css" rel="stylesheet" />
+		<script type="module" src="../../src/js/main.js"></script>
+		<script type="module" src="../../src/js/listing/newListing.js"></script>
+		<link rel="icon" type="image/png" sizes="32x32" href="../../src/styles/favicon/bidblitz.png" />
+		<title>Create New Listing</title>
+	</head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="../../src/css/style.css" rel="stylesheet" />
-  <script type="module" src="../../src/js/main.js"></script>
-  <script type="module" src="../../src/js/listing/newListing.js"></script>
-  <link rel="icon" type="image/png" sizes="32x32" href="../../src/styles/favicon/bidblitz.png">
-  <title>Create New Listing</title>
-</head>
+	<body>
+		<nav class="bg-cyan-700 dark:bg-gray-800 z-40">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="flex justify-between h-16">
+					<div class="flex">
+						<div class="flex-shrink-0 mt-4">
+							<a href="/" class="text-2xl font-bold text-white">BidBlitz</a>
+						</div>
+						<button id="dark-mode-toggle" class="ml-5">
+							<span id="dark-icon" class="hidden">☀️</span>
+							<span id="light-icon" class="hidden">🌙</span>
+						</button>
+					</div>
+					<div class="relative self-center flex md:ml-10">
+						<button class="text-white hover:text-red-600" id="login-button">Login</button>
+						<div id="user-profile-nav" class="text-white text-lg flex gap-2 hover:cursor-pointer hidden">
+							<img src="#" alt="#" id="user-profile-picture" />
+						</div>
 
-<body>
-  <nav class="bg-cyan-700 dark:bg-gray-800 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex">
-          <div class="flex-shrink-0 mt-4">
-            <a href="/" class="text-2xl font-bold text-white">BidBlitz</a>
-          </div>
-          <button id="dark-mode-toggle" class="ml-5">
-            <span id="dark-icon" class="hidden">☀️</span>
-            <span id="light-icon" class="hidden">🌙</span>
-            
-          </button>
-        </div>
-        <div class="relative self-center flex md:ml-10">
-          <button class="text-white hover:text-red-600" id="login-button">Login</button>
-          <div id="user-profile-nav" class="text-white text-lg flex gap-2 hover:cursor-pointer hidden">
-            <img src="#" alt="#" id="user-profile-picture" />
-          </div>
+						<div
+							id="secret-modal-bg"
+							class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center"
+						>
+							<div
+								id="user-profile-modal"
+								class="absolute p-4 bg-white dark:bg-neutral-800 dark:text-white dark:border dark:border-gray-400 rounded-lg shadow-lg min-w-64"
+							>
+								<span id="closeModal" class="relative cursor-pointer float-right">❌</span>
+								<div id="profile-modal-content"></div>
+								<div class="flex justify-between self-center mt-4">
+									<a
+										href="#"
+										id="minimenu-anchor"
+										class="py-2 hover:cursor-pointer hover:text-red-600 hover:drop-shadow-sm"
+										>My Profile</a
+									>
+									<button id="logout-button" class="bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded">
+										Logout
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
 
-          <div id="secret-modal-bg" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
-            <div id="user-profile-modal" class="absolute p-4 bg-white dark:bg-neutral-800 dark:text-white dark:border dark:border-gray-400 rounded-lg shadow-lg min-w-64">
-              <span id="closeModal" class="relative cursor-pointer float-right">❌</span>
-              <div id="profile-modal-content"></div>
-              <div class="flex justify-between self-center mt-4">
-                <a href="#" id="minimenu-anchor" class="py-2 hover:cursor-pointer hover:text-red-600 hover:drop-shadow-sm">My Profile</a>
-                <button id="logout-button" class="bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded">Logout</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+		<div id="login-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10 hidden">
+			<div class="bg-white dark:bg-neutral-800 dark:text-white rounded-lg shadow-lg p-6 w-96">
+				<div class="flex justify-between mb-4">
+					<h2 class="text-lg font-bold">Login</h2>
+					<button id="close-modal-login">❌</button>
+				</div>
+				<form id="login-form">
+					<div class="mb-4">
+						<label for="email-login" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
+						<input
+							type="email"
+							id="email-login"
+							required
+							class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
+							placeholder="youremail@stud.noroff.no"
+						/>
+					</div>
+					<div class="mb-4">
+						<label for="password-login" class="block text-sm font-medium text-gray-700 dark:text-white"
+							>Password</label
+						>
+						<input
+							type="password"
+							id="password-login"
+							required
+							class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
+							placeholder="********"
+						/>
+					</div>
+					<button type="submit" class="bg-cyan-700 text-white px-4 py-2 rounded">Login</button>
+				</form>
+				<p class="mt-4">
+					No profile?
+					<button id="register-button" class="dark:text-white underline hover:text-red-600">Click here</button> to
+					register a profile!
+				</p>
+			</div>
+		</div>
+		<div id="register-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10 hidden">
+			<div class="bg-white dark:bg-neutral-800 dark:text-white rounded-lg shadow-lg p-6 w-96">
+				<div class="flex justify-between mb-4">
+					<h2 class="text-lg font-bold">Register a new account</h2>
+					<button id="close-modal-register">❌</button>
+				</div>
+				<form id="register-form">
+					<div class="mb-4">
+						<label for="username" class="block text-sm font-medium text-gray-700 dark:text-white">Username</label>
+						<input
+							type="text"
+							id="username"
+							required
+							class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 mb-4 text-black"
+							placeholder="Username"
+						/>
+						<label for="email-register" class="block text-sm font-medium text-gray-700 dark:text-white"
+							>Email</label
+						>
+						<input
+							type="email"
+							id="email-register"
+							required
+							class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
+							placeholder="youremail@stud.noroff.no"
+						/>
+					</div>
+					<div class="mb-4">
+						<label for="password-register" class="block text-sm font-medium text-gray-700 dark:text-white"
+							>Password</label
+						>
+						<input
+							type="password"
+							id="password-register"
+							required
+							class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
+							placeholder="********"
+						/>
+					</div>
+					<button type="submit" class="bg-cyan-700 text-white px-4 py-2 rounded">Register</button>
+				</form>
+				<p class="mt-4">
+					Already have a profile?
+					<button id="back-to-login" class="dark:text-white underline hover:text-red-600">Click here</button> to
+					login!
+				</p>
+			</div>
+		</div>
 
-  <div id="login-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-    <div class="bg-white dark:bg-neutral-800 dark:text-white rounded-lg shadow-lg p-6 w-96">
-      <div class="flex justify-between mb-4">
-        <h2 class="text-lg font-bold">Login</h2>
-        <button id="close-modal-login">❌</button>
-      </div>
-      <form id="login-form">
-        <div class="mb-4">
-          <label for="email-login" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
-          <input type="email" id="email-login" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
-            placeholder="youremail@stud.noroff.no">
-        </div>
-        <div class="mb-4">
-          <label for="password-login" class="block text-sm font-medium text-gray-700 dark:text-white">Password</label>
-          <input type="password" id="password-login" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
-            placeholder="********">
-        </div>
-        <button type="submit" class="bg-cyan-700 text-white px-4 py-2 rounded">Login</button>
-      </form>
-      <p class="mt-4">No profile? <button id="register-button"
-          class="dark:text-white underline hover:text-red-600">Click here</button> to register a profile!</p>
-    </div>
-  </div>
-  <div id="register-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-    <div class="bg-white dark:bg-neutral-800 dark:text-white rounded-lg shadow-lg p-6 w-96">
-      <div class="flex justify-between mb-4">
-        <h2 class="text-lg font-bold">Register a new account</h2>
-        <button id="close-modal-register">❌</button>
-      </div>
-      <form id="register-form">
-        <div class="mb-4">
-          <label for="username" class="block text-sm font-medium text-gray-700 dark:text-white">Username</label>
-          <input type="text" id="username" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 mb-4 text-black"
-            placeholder="Username">
-          <label for="email-register" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
-          <input type="email" id="email-register" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
-            placeholder="youremail@stud.noroff.no">
-        </div>
-        <div class="mb-4">
-          <label for="password-register" class="block text-sm font-medium text-gray-700 dark:text-white">Password</label>
-          <input type="password" id="password-register" required
-            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-cyan-700 text-black"
-            placeholder="********">
-        </div>
-        <button type="submit" class="bg-cyan-700 text-white px-4 py-2 rounded">Register</button>
-      </form>
-      <p class="mt-4">Already have a profile? <button id="back-to-login"
-          class="dark:text-white underline hover:text-red-600">Click here</button> to login!</p>
-    </div>
-  </div>
-
-  
-  <div class="bg-gray-100 text-black dark:bg-neutral-900 dark:text-white -z-50 min-h-screen flex self-center justify-center">
-      <div class="mt-8 mb-auto w-full max-w-2xl bg-white dark:bg-gray-800 p-4 rounded-xl">
-        <button id="back-to-profile" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded md:absolute z-10 md:left-16 md:top-28 ml-1">Back to Profile</button>
-        <form id="new-listing-form" class="flex flex-col">
-            <h1 class="font-semibold text-3xl self-center md:mt-10 md-0">Create New Listing</h1>
-            <label for="title">Listing Title:</label>
-            <input type="text" id="title" class="text-black bg-gray-50 p-2 border-black border-2 rounded" name="title" maxlength="280" placeholder="Enter Listing Title" required>
-            <label for="description" class="mt-4">Description: (Max 280 characters)</label>
-            <textarea id="description" name="description" maxlength="280" class="text-black bg-gray-50 p-2 border-black border-2 rounded resize-none w-full h-48" placeholder="Describe your listing here..." required></textarea>
-            <div id="media-input" class="flex flex-col my-4">
-                <button id="more-images" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Add Another Image</button>
-                <label for="productImage1">Product Image URL:</label>
-                <input type="url" id="productImage" name="productImage" class="text-black bg-gray-50 p-2 border-black border-2 rounded product-image-input" placeholder="Enter Image URL" required>
-            </div>
-            <label for="endDate">Set End Date:</label>
-            <input type="datetime-local" id="endDate" name="endDate" class="text-black bg-gray-50 p-2 border-black border-2 rounded" required>
-            <button type="submit" form="new-listing-form" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Post your Listing!</button>
-        </form>
-    </div>
-  </div>
-</body>
-
+		<div
+			class="bg-gray-100 text-black dark:bg-neutral-900 dark:text-white -z-50 min-h-screen flex self-center justify-center"
+		>
+			<div class="mt-8 mb-auto w-full max-w-2xl bg-white dark:bg-gray-800 p-4 rounded-xl">
+				<button
+					id="back-to-profile"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded md:absolute z-10 md:left-16 md:top-28 ml-1"
+				>
+					Back to Profile
+				</button>
+				<form id="new-listing-form" class="flex flex-col">
+					<h1 class="font-semibold text-3xl self-center md:mt-10 md-0">Create New Listing</h1>
+					<label for="title">Listing Title:</label>
+					<input
+						type="text"
+						id="title"
+						class="text-black bg-gray-50 p-2 border-black border-2 rounded"
+						name="title"
+						maxlength="280"
+						placeholder="Enter Listing Title"
+						required
+					/>
+					<label for="description" class="mt-4">Description: (Max 280 characters)</label>
+					<textarea
+						id="description"
+						name="description"
+						maxlength="280"
+						class="text-black bg-gray-50 p-2 border-black border-2 rounded resize-none w-full h-48"
+						placeholder="Describe your listing here..."
+						required
+					></textarea>
+					<div id="media-input" class="flex flex-col my-4">
+						<button
+							id="more-images"
+							type="button"
+							class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+						>
+							Add Another Image
+						</button>
+						<label for="productImage1">Product Image URL:</label>
+						<input
+							type="url"
+							id="productImage"
+							name="productImage"
+							class="text-black bg-gray-50 p-2 border-black border-2 rounded product-image-input"
+							placeholder="Enter Image URL"
+							required
+						/>
+					</div>
+					<label for="endDate">Set End Date:</label>
+					<input
+						type="datetime-local"
+						id="endDate"
+						name="endDate"
+						class="text-black bg-gray-50 p-2 border-black border-2 rounded"
+						required
+					/>
+					<button
+						type="submit"
+						form="new-listing-form"
+						class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+					>
+						Post your Listing!
+					</button>
+				</form>
+			</div>
+		</div>
+	</body>
 </html>
