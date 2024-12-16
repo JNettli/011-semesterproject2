@@ -1,19 +1,8 @@
 // vite.config.js
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
-  plugins: [
-    viteStaticCopy({
-      targets: [
-        {
-          src: '_redirects',
-          dest: '',
-        },
-      ],
-    }),
-  ],
   build: {
     rollupOptions: {
       input: {
