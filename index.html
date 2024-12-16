@@ -111,18 +111,24 @@
   </div>
 
   <main class="text-black dark:text-white flex flex-col">
-    <div id="filter" class="self-center mt-4 w-full max-w-3xl">
-      <label for="sortBy">Sort By:</label>
-      <select name="sortBy" id="sortBy" class="text-black w-48">
-        <option value="op1">Ends First</option>
-        <option value="op2">Option 2</option>
-        <option value="op3">Option 3</option>
-      </select>
-      <label for="sortByAscDesc">Sort By Asc/Desc:</label>
-      <select name="sortByAscDesc" id="sortByAscDesc" class="text-black w-48">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-      </select>
+    <div id="filter" class="self-center mt-4 w-full max-w-3xl flex flex-col">
+      <div class="flex gap-4 self-center mb-4">
+        <div class="flex flex-col">
+          <label for="sortBy">Sort:</label>
+          <select name="sortBy" id="sortBy" class="w-60 p-2 rounded border border-gray-300 dark:border-gray-700 text-black">
+            <option value="endsAt">Time Left for Listing</option>
+            <option value="created">When Listing were created</option>
+          </select>
+        </div>
+        <div class="flex flex-col">
+          <label for="sortByAscDesc">Sort By:</label>
+          <select name="sortByAscDesc" id="sortByAscDesc" class="w-60 p-2 rounded border border-gray-300 dark:border-gray-700 text-black">
+            <option value="asc">First to Last</option>
+            <option value="desc">Last to First</option>
+          </select>
+        </div>
+      </div>
+      <button id="startFilter" class="self-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-16 rounded mt-4">Filter Listings</button>
     </div>
     <div id="listing-box" class="self-center mt-4 w-full max-w-5xl"></div>
     <div id="pagination" class="self-center mb-8"></div>

@@ -11,6 +11,9 @@ document.title = `${userProfileId}'s Bid Blitz Profile`;
 
 const itemsPerPage = 10;
 let currentPage = 1;
+let sortBy = "created";
+let ascDesc = "desc";
+let endedBool = false;
 
 async function getSingleProfile() {
     const response = await fetch(`${profileRequest}${userProfileId}`, {
@@ -71,7 +74,7 @@ async function getSingleProfile() {
     hiddenProfileInfo.classList.add('w-40');
     profileInformationBox.appendChild(hiddenProfileInfo);
 
-    const listingsOfProfile = await fetch(`${profileRequest}${userProfileId}/listings?limit=${itemsPerPage}&_bids=true&page=${currentPage}`, {
+    const listingsOfProfile = await fetch(`${profileRequest}${userProfileId}/listings?limit=${itemsPerPage}&_bids=true&page=${currentPage}&sort=${sortBy}&sortOrder=${ascDesc}&_active=${endedBool}`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'X-Noroff-API-Key': headerKey,
@@ -79,20 +82,193 @@ async function getSingleProfile() {
     });
 
     const listingsJson = await listingsOfProfile.json();
-
     const listings = listingsJson.data;
 
     const listingBox = document.createElement('div');
-    listingBox.classList.add('grid', 'grid-cols-1', 'gap-4');
+    listingBox.classList.add('flex', 'flex-col', 'gap-4', 'mt-4');
     userProfile.appendChild(listingBox);
-    
+
     const newListingButton = document.createElement('button');
     newListingButton.innerText = 'Create New Listing';
-    newListingButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'mt-4', 'hidden');
-    newListingButton.addEventListener('click', function() {
+    newListingButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'hidden');
+    newListingButton.addEventListener('click', () => {
         window.location.href = '/listing/create/';
     });
     listingBox.appendChild(newListingButton);
+
+    const winsBox = document.createElement('div');
+    winsBox.classList.add('w-full', 'flex', 'flex-col');
+    const checkWins = document.createElement('button');
+    checkWins.innerText = 'Check Wins';
+    checkWins.classList.add('bg-green-700', 'hover:bg-green-600', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'hidden');
+    checkWins.addEventListener('click', async () => {
+        const wins = await fetch(`${profileRequest}${userProfileId}/wins`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'X-Noroff-API-Key': headerKey,
+            }
+        });
+        const winsJson = await wins.json();
+        const winsArray = winsJson.data;
+
+        if(winsArray.length > 0) {
+            listingBox.innerHTML = '';
+            const backToProfile = document.createElement('button');
+            backToProfile.innerText = 'Back to Profile';
+            backToProfile.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded');
+            backToProfile.addEventListener('click', () => {
+                window.location.href = `/profile/?userId=${userProfileId}`;
+            });
+            listingBox.appendChild(backToProfile);
+            winsArray.forEach(win => {
+                const winDiv = document.createElement('div');
+                winDiv.classList.add('bg-white', 'dark:bg-gray-800', 'p-6', 'rounded', 'flex', 'justify-between', 'mt-4');
+                listingBox.appendChild(winDiv);
+                
+                const winImage = document.createElement('img');
+                win.media.push({url: 'https://via.placeholder.com/150', alt: 'Nice image'});
+                winImage.src = win.media[0]?.url || 'https://via.placeholder.com/150';
+                winImage.alt = win.media[0]?.alt || 'Nice image';
+                winImage.classList.add('w-48', 'h-48', 'object-cover', 'rounded', 'mr-4');
+                winDiv.appendChild(winImage);
+        
+                const winInfo = document.createElement('div');
+                winInfo.classList.add('flex', 'flex-col', 'w-full', 'overflow-hidden');
+                winDiv.appendChild(winInfo);
+        
+                const winTitle = document.createElement('h4');
+                winTitle.innerText = win.title;
+                winTitle.classList.add('text-2xl', 'font-bold', 'text-black', 'dark:text-white', 'text-clip');
+                winInfo.appendChild(winTitle);
+        
+                const winDescription = document.createElement('p');
+                winDescription.innerText = win.description;
+                winDescription.classList.add('text-lg', 'text-black', 'dark:text-white');
+                winInfo.appendChild(winDescription);
+        
+                const winPrice = document.createElement('p');
+                if(win.bids.length > 0) {
+                    const allBidsSorted = win.bids.sort((a, b) => b.amount - a.amount);
+                    const lastBid = allBidsSorted.slice()[0].amount;
+                    winPrice.innerText = `Winning Bid: ${lastBid} 🪙`;
+                    winPrice.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white', 'mt-auto');
+                } else {
+                    winPrice.innerText = `There are currently no bids on this listing!`;
+                    winPrice.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white', 'mt-auto');
+                }
+                winInfo.appendChild(winPrice);
+        
+                const winButton = document.createElement('button');
+                winButton.innerText = 'View Listing';
+                winButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'mt-4');
+                winButton.addEventListener('click', () => {
+                    window.location.href = `/listing/?listingId=${win.id}`;
+                });
+                winInfo.appendChild(winButton);
+                if(Math.floor(Date.parse(win.endsAt))-Date.now() < 0) {
+                    winDiv.classList.add('border-4', 'border-red-500', 'dark:border-red-400');
+                    winPrice.innerText = `This listing has ended!`;
+                    winPrice.classList.add('text-red-500', 'dark:text-red-400')
+                }
+            });
+        } else {
+            const noWins = document.createElement('p');
+            noWins.innerText = 'No wins found.';
+            noWins.classList.add('text-lg', 'font-semibold', 'text-red-500', 'dark:text-red-400', 'self-center', 'mt-2');
+            winsBox.appendChild(noWins);
+            setTimeout(() => {
+                noWins.innerText = '';
+        }, 2500);
+        }
+        
+    });
+    winsBox.appendChild(checkWins);
+    listingBox.appendChild(winsBox);
+
+    const filterDiv = document.createElement('div');
+    filterDiv.classList.add('self-center', 'mt-4', 'w-full', 'max-w-3xl', 'flex', 'flex-col');
+    listingBox.appendChild(filterDiv);
+
+    const filterOptionBox = document.createElement('div');
+    filterOptionBox.classList.add('flex', 'gap-4', 'self-center');
+    filterDiv.appendChild(filterOptionBox);
+
+    const filterOptionLeft = document.createElement('div');
+    filterOptionLeft.classList.add('flex', 'flex-col');
+    filterOptionBox.appendChild(filterOptionLeft);
+
+    const filterOptionRight = document.createElement('div');
+    filterOptionRight.classList.add('flex', 'flex-col');
+    filterOptionBox.appendChild(filterOptionRight);
+
+    const filterLabelLeft = document.createElement('label');
+    filterLabelLeft.innerText = 'Sort:';
+    filterOptionLeft.appendChild(filterLabelLeft);
+
+    const filterSelectLeft = document.createElement('select');
+    filterSelectLeft.id = 'sortBy';
+    filterSelectLeft.classList.add('w-60', 'p-2', 'rounded', 'border', 'border-gray-300', 'dark:border-gray-700', 'text-black');
+    filterOptionLeft.appendChild(filterSelectLeft);
+
+    const filterOption1 = document.createElement('option');
+    filterOption1.value = 'created';
+    filterOption1.innerText = 'When Listing were created';
+    filterSelectLeft.appendChild(filterOption1);
+
+    const filterOption2 = document.createElement('option');
+    filterOption2.value = 'endsAt';
+    filterOption2.innerText = 'Time Left for Listing';
+    filterSelectLeft.appendChild(filterOption2);
+
+    const filterLabelRight = document.createElement('label');
+    filterLabelRight.innerText = 'Sort Order:';
+    filterOptionRight.appendChild(filterLabelRight);
+
+    const filterSelectRight = document.createElement('select');
+    filterSelectRight.id = 'sortByAscDesc';
+    filterSelectRight.classList.add('w-60', 'p-2', 'rounded', 'border', 'border-gray-300', 'dark:border-gray-700', 'text-black');
+    filterOptionRight.appendChild(filterSelectRight);
+
+    const filterOption3 = document.createElement('option');
+    filterOption3.value = 'desc';
+    filterOption3.innerText = 'Last to First';
+    filterSelectRight.appendChild(filterOption3);
+    
+    const filterOption4 = document.createElement('option');
+    filterOption4.value = 'asc';
+    filterOption4.innerText = 'First to Last';
+    filterSelectRight.appendChild(filterOption4);
+    
+    const filterEndedBox = document.createElement('div');
+    filterEndedBox.classList.add('flex', 'gap-2', 'self-center', 'mt-4');
+    filterDiv.appendChild(filterEndedBox);
+
+    const filterEndedLabel = document.createElement('label');
+    filterEndedLabel.innerText = 'Hide Ended Listings:';
+    filterEndedBox.appendChild(filterEndedLabel);
+
+    const filterEnded = document.createElement('input');
+    filterEnded.type = 'checkbox';
+    filterEnded.id = 'filterEnded';
+    filterEnded.checked = endedBool;
+    filterEndedBox.appendChild(filterEnded);
+
+    const filterButton = document.createElement('button');
+    filterButton.innerText = 'Apply Filters';
+    filterButton.id = 'startFilter';
+    filterButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'font-bold', 'py-2', 'px-8', 'rounded', 'mt-4', 'self-center');
+    filterButton.addEventListener("click", () => {
+        ascDesc = document.querySelector("#sortByAscDesc").value;
+        sortBy = document.querySelector("#sortBy").value;
+        endedBool = document.querySelector("#filterEnded").checked;
+        const url = new URL(window.location);
+        url.searchParams.set("sortOrder", ascDesc);
+        url.searchParams.set("sort", sortBy);
+        window.history.pushState({}, "", url);
+        getFilterValues();
+        getSingleProfile();
+    });
+    filterDiv.appendChild(filterButton);
 
     const listingBoxHeader = document.createElement('h3');
     listingBoxHeader.innerText = `${userProfileId}'s Listings:`;
@@ -129,7 +305,8 @@ async function getSingleProfile() {
     
             const listingPrice = document.createElement('p');
             if(listing.bids.length > 0) {
-                const lastBid = listing.bids.splice(-1)[0].amount
+                const allBidsSorted = listing.bids.sort((a, b) => b.amount - a.amount);
+                const lastBid = allBidsSorted.slice()[0].amount;
                 listingPrice.innerText = `Current Bid: ${lastBid} 🪙`;
                 listingPrice.classList.add('text-lg', 'font-semibold', 'text-black', 'dark:text-white', 'mt-auto');
             } else {
@@ -154,9 +331,7 @@ async function getSingleProfile() {
         const paginationBox = document.querySelector('#pagination');
         paginationBox.classList.add('flex', 'gap-2')
         paginationBox.innerHTML = '';
-        
         const totalPages = listingsJson.meta.pageCount;
-        console.log(listingsJson.meta);
         
         if(currentPage > 1) {
             const prevButtonBox = document.createElement('div');
@@ -216,8 +391,23 @@ async function getSingleProfile() {
         });
         hiddenProfileInfo.appendChild(editProfileButton);
         newListingButton.classList.remove('hidden');
+        checkWins.classList.remove('hidden');
     }
 }
+
+// Function to get current filter values from URL
+function getFilterValues() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sortOrder = urlParams.get("sortOrder");
+    const sort = urlParams.get("sort");
+    if (sortOrder) {
+      ascDesc = sortOrder;
+    }
+    if (sort) {
+      sortBy = sort;
+    }
+}
+
 // Function to update the URL with the current page
 function updateURL() {
     const url = new URL(window.location);

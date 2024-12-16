@@ -18,5 +18,4 @@ async function search(query) {
     const data = await res.json();
 
     window.location.href = `/search?q=${query}`;
-    console.log(data);
 }
